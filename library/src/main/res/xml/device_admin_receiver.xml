@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <device-admin>
 	<uses-policies>
+		<!-- Set password rules -->
 		<limit-password />
+		<!-- Monitor screen unlock attempts -->
 		<watch-login />
+		<!-- Change the unlock password -->
 		<reset-password />
+		<!-- Lock screen -->
 		<force-lock />
+		<!-- Clear data , Restore factory mode , Without warning -->
 		<wipe-data />
+		<!-- Lock screen password validity -->
 		<expire-password />
+		<!-- Encrypt stored application data -->
 		<encrypted-storage />
+		<!-- Disable camera -->
 		<disable-camera />
+		<!-- Disable lock screen information -->
 		<disable-keyguard-features />
 	</uses-policies>
 </device-admin>

@@ -72,3 +72,15 @@ androidDevicePolicyManager.stopLockTask()
 ```kotlin
 androidDevicePolicyManager.stopLockTaskAndStartActivity(MainActivity::class.java)
 ```
+
+### Set the app as device administrator
+
+```shell
+adb shell dpm set-device-owner <applicationId>/.AndroidDeviceAdminReceiver
+```
+
+Example
+
+```shell
+adb shell dpm set-device-owner com.prongbang.kioskmode/.AndroidDeviceAdminReceiver
+```
