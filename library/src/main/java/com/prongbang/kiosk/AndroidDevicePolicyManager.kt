@@ -12,31 +12,40 @@ import android.os.Build
 import android.os.UserManager
 import android.provider.Settings
 import android.view.View.*
+import androidx.annotation.RequiresApi
 
 open class AndroidDevicePolicyManager constructor(
     private val activity: Activity,
     private val componentName: ComponentName,
-) {
+) : IAndroidDevicePolicyManager {
 
     private val devicePolicyManager =
         activity.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
 
-    fun isDeviceOwnerApp(): Boolean = devicePolicyManager.isDeviceOwnerApp(activity.packageName)
+    override fun isDeviceOwnerApp(): Boolean =
+        devicePolicyManager.isDeviceOwnerApp(activity.packageName)
 
-    fun startLockTask() {
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun isPreferentialNetworkServiceEnabled(): Boolean =
+        devicePolicyManager.isPreferentialNetworkServiceEnabled
+
+    override fun isProfileOwnerApp(): Boolean =
+        devicePolicyManager.isProfileOwnerApp(activity.packageName)
+
+    override fun startLockTask() {
         setKioskPolicies(enable = true, isAdmin = isDeviceOwnerApp())
     }
 
-    fun stopLockTask() {
+    override fun stopLockTask() {
         setKioskPolicies(enable = false, isAdmin = isDeviceOwnerApp())
     }
 
-    fun <T> stopLockTaskAndStartActivity(cls: Class<T>) {
+    override fun <T> stopLockTaskAndStartActivity(cls: Class<T>) {
         stopLockTask()
         startActivityClearTop(cls)
     }
 
-    fun <T> startActivityClearTop(cls: Class<T>) {
+    override fun <T> startActivityClearTop(cls: Class<T>) {
         val intent = Intent(activity, cls).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
@@ -44,7 +53,7 @@ open class AndroidDevicePolicyManager constructor(
         activity.startActivity(intent)
     }
 
-    fun setKioskPolicies(enable: Boolean, isAdmin: Boolean) {
+    override fun setKioskPolicies(enable: Boolean, isAdmin: Boolean) {
         if (isAdmin) {
             setRestrictions(enable)
             enableStayOnWhilePluggedIn(enable)
@@ -56,7 +65,7 @@ open class AndroidDevicePolicyManager constructor(
         setImmersiveMode(enable)
     }
 
-    fun enableStayOnWhilePluggedIn(active: Boolean) = if (active) {
+    override fun enableStayOnWhilePluggedIn(active: Boolean) = if (active) {
         devicePolicyManager.setGlobalSetting(
             componentName,
             Settings.Global.STAY_ON_WHILE_PLUGGED_IN,
@@ -70,13 +79,13 @@ open class AndroidDevicePolicyManager constructor(
         )
     }
 
-    fun setUserRestriction(restriction: String, disallow: Boolean) = if (disallow) {
+    override fun setUserRestriction(restriction: String, disallow: Boolean) = if (disallow) {
         devicePolicyManager.addUserRestriction(componentName, restriction)
     } else {
         devicePolicyManager.clearUserRestriction(componentName, restriction)
     }
 
-    fun setLockTask(start: Boolean, isAdmin: Boolean) {
+    override fun setLockTask(start: Boolean, isAdmin: Boolean) {
         if (isAdmin) {
             devicePolicyManager.setLockTaskPackages(
                 componentName,
@@ -90,14 +99,14 @@ open class AndroidDevicePolicyManager constructor(
         }
     }
 
-    fun setKeyGuardEnabled(enable: Boolean) {
+    override fun setKeyGuardEnabled(enable: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             devicePolicyManager.setKeyguardDisabled(componentName, !enable)
         }
     }
 
     @Suppress("DEPRECATION")
-    fun setImmersiveMode(enable: Boolean) {
+    override fun setImmersiveMode(enable: Boolean) {
         if (enable) {
             val flags = (SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -114,7 +123,7 @@ open class AndroidDevicePolicyManager constructor(
         }
     }
 
-    fun setUpdatePolicy(enable: Boolean) {
+    override fun setUpdatePolicy(enable: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (enable) {
                 devicePolicyManager.setSystemUpdatePolicy(
@@ -127,7 +136,7 @@ open class AndroidDevicePolicyManager constructor(
         }
     }
 
-    fun setRestrictions(disallow: Boolean) {
+    override fun setRestrictions(disallow: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setUserRestriction(UserManager.DISALLOW_SAFE_BOOT, disallow)
         }
@@ -137,7 +146,7 @@ open class AndroidDevicePolicyManager constructor(
         setUserRestriction(UserManager.DISALLOW_ADJUST_VOLUME, disallow)
     }
 
-    fun setAsHomeApp(enable: Boolean) {
+    override fun setAsHomeApp(enable: Boolean) {
         if (enable) {
             val intentFilter = IntentFilter(Intent.ACTION_MAIN).apply {
                 addCategory(Intent.CATEGORY_HOME)

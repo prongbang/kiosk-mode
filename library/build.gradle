@@ -11,7 +11,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.prongbang'
                 artifactId = 'kiosk-mode'
-                version = '1.0.3'
+                version = '1.0.4'
             }
         }
     }
