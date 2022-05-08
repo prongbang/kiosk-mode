@@ -12,9 +12,8 @@ import android.os.UserManager
 import android.provider.Settings
 import android.view.View.*
 import androidx.fragment.app.FragmentActivity
-import javax.inject.Inject
 
-open class AndroidDevicePolicyManager @Inject constructor(
+open class AndroidDevicePolicyManager constructor(
     private val activity: FragmentActivity,
     private val componentName: ComponentName,
 ) {
