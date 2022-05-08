@@ -11,7 +11,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.prongbang'
                 artifactId = 'kiosk-mode'
-                version = '1.0.0'
+                version = '1.0.3'
             }
         }
     }
@@ -47,7 +47,6 @@ android {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
