@@ -1,6 +1,5 @@
 package com.prongbang.kiosk
 
-import android.app.Activity
 import android.app.admin.DevicePolicyManager
 import android.app.admin.SystemUpdatePolicy
 import android.content.ComponentName
@@ -12,9 +11,11 @@ import android.os.Build
 import android.os.UserManager
 import android.provider.Settings
 import android.view.View.*
+import androidx.fragment.app.FragmentActivity
+import javax.inject.Inject
 
-class AndroidDevicePolicyManager(
-    private val activity: Activity,
+open class AndroidDevicePolicyManager @Inject constructor(
+    private val activity: FragmentActivity,
     private val componentName: ComponentName,
 ) {
 
