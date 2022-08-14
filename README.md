@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 - `app/build.gradle`
 
 ```groovy
-implementation 'com.github.prongbang:kiosk-mode:1.0.2'
+implementation 'com.github.prongbang:kiosk-mode:1.0.4'
 ```
 
 ## How to use
